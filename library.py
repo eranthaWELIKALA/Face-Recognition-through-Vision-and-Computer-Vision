@@ -42,7 +42,8 @@ def split_video(video_name_full):
 	while success:
 		success, image = video_capture.read()
 		print("Read a new frame: %d"%count,success)
-		cv2.imwrite(os.path.join(dir_path, "frame%d.jpg"%count), image)
+		frame_name = video_name+str(count)+".jpg"
+		cv2.imwrite(os.path.join(dir_path, frame_name), image)
 		count += 1
 
 #--------------------------------------------------------------------------------------------
@@ -122,6 +123,16 @@ def blur_image(img, blur_type, horizontally_drag = 0, vertically_drag = 0, kerna
 
 #--------------------------------------------------------------------------------------------
 
-img = cv2.imread('images/abc/frame0.jpg')
-img2 = add_noise("speckle",img)
-plotting_images(img, img2)
+def read_data(path):
+	data = []
+	for (dirpath, dirnames, filenames) in os.walk(path):
+		for dirname in dirnames:
+			for f in os.listdir(dirpath + dirname):
+				try:
+				    img = np.ravel(misc.imread(dirpath + dirname + '/' + f, flatten=True))/255
+				    data.append((dirname, img))
+				except:
+					pass
+	return data
+
+#split_video("abc.mp4")
